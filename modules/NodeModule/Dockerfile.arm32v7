@@ -1,0 +1,22 @@
+FROM arm32v7/node:10-slim
+
+WORKDIR /app/
+
+RUN npm install -g --unsafe-perm node-red
+WORKDIR /usr/local/lib/node_modules/node-red/node_modules/node-red-contrib-azure-iot-edge
+
+COPY azureiotedge.js ./
+COPY azureiotedge.html ./
+COPY ./icons/azureiotedge.png ./icons/
+COPY ./examples/* ./examples/
+COPY package*.json ./
+
+RUN npm install --production
+
+WORKDIR /app/
+
+EXPOSE 1880/tcp
+
+USER node
+
+CMD ["node-red", , "--flowFile", "flows.json", "--userDir", "/node-red/"]
